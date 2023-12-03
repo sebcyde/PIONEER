@@ -1,18 +1,23 @@
+mod get_dirs;
 mod get_extensions;
 mod types;
 
+use crate::get_dirs::directories::*;
 use crate::get_extensions::extensions::*;
 use std::path::PathBuf;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     println!("\nSTARTING PIONEER.\n");
 
-    let mut file_path: PathBuf = get_file_path();
+    create_pioneer_dir();
+    create_pioneer_inner_dirs();
+    let file_path: PathBuf = get_file_path();
 
     println!("Accessing Extensions Configuration: {:?}", &file_path);
     let response = get_extensions_list(file_path);
     match response {
-        Ok(extensions) => list_extensions(extensions),
+        Ok(extensions) => list_extensions(&extensions).await,
         Err(err) => eprintln!("Error: {}", err),
     }
 }

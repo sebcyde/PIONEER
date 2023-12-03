@@ -47,7 +47,7 @@ pub mod extensions {
             let res_bytes = response.bytes().await.unwrap();
             let _ = copy(&mut res_bytes.as_ref(), &mut output_file);
 
-            println!("Download successful.\n");
+            println!("Download successful.");
         } else {
             println!(
                 "Failed to download the file. Status code: {}",
@@ -63,11 +63,7 @@ pub mod extensions {
             let ext_details: Vec<&str> = extension.identifier.id.as_str().split('.').collect();
             println!("Author: {}", &ext_details[0]);
             println!("Name: {}", &ext_details[1]);
-            println!("Current Version: {}", &extension.version);
-
-            let download_endpoint: String =
-                get_latest_version_link(&ext_details[0], &ext_details[1]).await;
-            download_latest_version(download_endpoint, ext_details[1]).await;
+            println!("Current Version: {}\n", &extension.version);
         }
     }
 }

@@ -1,5 +1,6 @@
 pub mod directories {
 
+    use std::path::Path;
     use std::path::PathBuf;
 
     pub fn create_pioneer_dir() {
@@ -31,9 +32,13 @@ pub mod directories {
     }
 
     pub fn create_extension_dir(extensions_dir: &PathBuf) {
-        println!("Creating extension directory.");
-        _ = std::fs::create_dir_all(extensions_dir);
-        println!("Directory creation successful.");
+        if !Path::new(&extensions_dir).exists() {
+            println!("Creating extension directory.");
+            _ = std::fs::create_dir_all(extensions_dir);
+            println!("Directory creation successful.");
+        } else {
+            println!("Extension directory already exists. Skipping creation.");
+        }
     }
 
     pub fn get_extension_dir(extension_name: &str) -> PathBuf {

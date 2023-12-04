@@ -41,9 +41,34 @@ pub mod directories {
         }
     }
 
+    pub fn create_extension_backup_dir(extension_name: &str) {
+        let mut root: PathBuf = get_extension_dir(&extension_name);
+        root.push("Backup");
+
+        if !Path::new(&root).exists() {
+            println!("Creating extension backup directory.");
+            _ = std::fs::create_dir_all(root);
+            println!("Directory creation successful.");
+        }
+    }
+
+    pub fn get_extension_current_dir(extension_name: &str) -> PathBuf {
+        let mut root: PathBuf = dirs::home_dir().unwrap();
+        root.push(".vscode");
+        root.push("extensions");
+        root.push(extension_name);
+        return root;
+    }
+
     pub fn get_extension_dir(extension_name: &str) -> PathBuf {
         let mut root: PathBuf = get_download_dir();
         root.push(extension_name);
+        return root;
+    }
+
+    pub fn get_extension_backup_dir(extension_name: &str) -> PathBuf {
+        let mut root: PathBuf = get_extension_dir(&extension_name);
+        root.push("Backup");
         return root;
     }
 
@@ -52,7 +77,6 @@ pub mod directories {
         home.push("Documents");
         home.push("PIONEER");
         home.push("Files");
-
         return home;
     }
 }

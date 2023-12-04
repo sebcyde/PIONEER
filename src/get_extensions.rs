@@ -8,7 +8,9 @@ pub mod extensions {
     use std::io::copy;
 
     use crate::{
-        get_dirs::directories::{create_extension_dir, get_extension_dir, get_pioneer_dir},
+        get_dirs::directories::{
+            create_extension_backup_dir, create_extension_dir, get_extension_dir, get_pioneer_dir,
+        },
         types::types::Extension,
     };
 
@@ -24,9 +26,12 @@ pub mod extensions {
     pub async fn get_latest_version_link(author: &str, name: &str) -> String {
         let ext_dir: PathBuf = get_extension_dir(&name);
         create_extension_dir(&ext_dir);
+        create_extension_backup_dir(&name);
 
         let api_endpoint: String =
             format!("https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/{}/extension/{}/latest/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage", &author, &name);
+
+        println!("{}", &api_endpoint);
 
         return api_endpoint;
     }
@@ -57,8 +62,7 @@ pub mod extensions {
     }
 
     pub async fn list_extensions(extensions: &Vec<Extension>) {
-        println!("Currently Installed Extensions:\n");
-
+        println!("\nCurrently Installed Extensions:\n");
         for extension in extensions.iter() {
             let ext_details: Vec<&str> = extension.identifier.id.as_str().split('.').collect();
             println!("Author: {}", &ext_details[0]);
